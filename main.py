@@ -61,7 +61,6 @@ def input_players(Window,fields,button):
             field_size.append(fields[j].get())
         fields[j].pack_forget()
     player_fields = []
-    player_names = []
     j = 0
     for limit in field_size:
         i = 0
@@ -75,10 +74,21 @@ def input_players(Window,fields,button):
             i += 1
         j += 1
 
-    submit_button = tk.Button(Window, text="Submit Players", font=("Arial", 18),command=lambda:ai_call.call_ai("Who won the Eagles vs Cowboys game?"))
+    submit_button = tk.Button(Window, text="Submit Players", font=("Arial", 18),command=lambda:ai_adjustments(Window,player_fields,submit_button))
     submit_button.pack(pady=10)
 
-
+def ai_adjustments(scroll,fields,button):
+    button.pack_forget()
+    player_names = []
+    j = 0
+    for j in range(len(fields)):
+        if(j%2 != 0):
+            player_names.append(fields[j].get())
+        fields[j].pack_forget()
+    
+    result = ai_call.call("Make adjustments to my fantasy football roster based on recent player performance and upcoming matchups."
+    "Here is my current roster: " + ", ".join(player_names))
+    print(result)
 
 if __name__ == "__main__":
     main()
