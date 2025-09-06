@@ -1,4 +1,5 @@
 import tkinter as tk
+import ai_call
 
 positions = ["QB","RB","WR","TE","FLEX","DST","K","BENCH"]
 
@@ -74,7 +75,7 @@ def input_players(Window,fields,button):
             i += 1
         j += 1
 
-    submit_button = tk.Button(Window, text="Submit Players", font=("Arial", 18))
+    submit_button = tk.Button(Window, text="Submit Players", font=("Arial", 18),command=lambda:ai_call.call_ai("Who won the Eagles vs Cowboys game?"))
     submit_button.pack(pady=10)
 
 
