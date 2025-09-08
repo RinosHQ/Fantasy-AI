@@ -1,5 +1,6 @@
 import tkinter as tk
 import ai_call
+import requests
 
 positions = ["QB","RB","WR","TE","FLEX","DST","K","BENCH"]
 
@@ -85,10 +86,22 @@ def ai_adjustments(scroll,fields,button):
         if(j%2 != 0):
             player_names.append(fields[j].get())
         fields[j].pack_forget()
+
+    google_search = get_search_context("Recent NFL player performance and injuries")
+    result = ai_call.call(f"Given the following context:\n{google_search}\nMake adjustments to my fantasy football roster based on recent player performance and upcoming matchups." "Here is my current roster: " + ", ".join(player_names))
+    print(result.output[1].content[0].text)
+
+def get_search_context(query):
+    params = {
+        "q": query,
+        "api_key": "",
+        "engine": "google"
+    }
+    response = requests.get("https://serpapi.com/search", params=params)
+    results = response.json()
+    context = "\n".join([r["snippet"] for r in results.get("organic_results",[])[:3]])
+    return context
     
-    result = ai_call.call("Make adjustments to my fantasy football roster based on recent player performance and upcoming matchups."
-    "Here is my current roster: " + ", ".join(player_names))
-    print(result)
 
 if __name__ == "__main__":
     main()
