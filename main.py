@@ -88,7 +88,24 @@ def ai_adjustments(scroll,fields,button):
         fields[j].pack_forget()
 
     google_search = get_search_context("Recent NFL player performance and injuries")
-    result = ai_call.call(f"Given the following context:\n{google_search}\nMake adjustments to my fantasy football roster based on recent player performance and upcoming matchups." "Here is my current roster: " + ", ".join(player_names))
+    result = ai_call.call(f'''Given the following context:\n
+                          {google_search}\n
+                          Make adjustments to my fantasy football roster based on recent player performance and upcoming matchups.\n
+                          Here is my current roster: ''' + ", ".join(player_names) + 
+                          f'''\nThe roster limits are as follows: {positions[0]} QB, {positions[1]} RB, {positions[2]} WR, {positions[3]} TE, {positions[4]} FLEX, {positions[5]} DST, {positions[6]} K, and {positions[7]} BENCH.\n
+                          Give a structured response with the following format:\n
+                          QB: List of QBs\n
+                          RB: List of RBs\n
+                          WR: List of WRs\n
+                          TE: List of TEs\n
+                          FLEX: List of FLEX players\n
+                          DST: List of DSTs\n
+                          K: List of Ks\n
+                          DO NOT list more player than the roster limits allows.\n
+                          DO NOT include any explanations or justifications, just give a list of players to start at each position.\n
+                          DO NOT give any suggestions for trades, pickups from waivers, or drops.\n
+                          DO NOT include any players that are not currently on the roster provided.
+''')
     print(result.output[1].content[0].text)
 
 def get_search_context(query):
